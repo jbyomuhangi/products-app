@@ -2,6 +2,9 @@
   "name": "trustana-interview-assignment",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "20.x.x"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
