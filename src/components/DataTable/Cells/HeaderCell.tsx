@@ -1,21 +1,24 @@
-import { Box } from "@mui/material";
-import React from "react";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { Box, ButtonBase } from "@mui/material";
+import React, { useMemo, useState } from "react";
 
-// import useSearchParamsMap from "@/hooks/useSearchParamsMap";
+import useSearchParamsMap from "@/hooks/useSearchParamsMap";
 
-// const styles = {
-//   button: {
-//     width: "100%",
-//     display: "flex",
-//     gap: "10px",
-//     alignItems: "center",
-//     justifyContent: "space-between",
-//   },
-// };
+const styles = {
+  button: {
+    width: "100%",
+    display: "flex",
+    gap: "10px",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+};
 
 export interface Column {
   id: string;
   label: string;
+  orderingKey?: string;
   [key: string]: any;
 }
 
@@ -24,70 +27,72 @@ interface HeaderCellProps {
 }
 
 const HeaderCell: React.FC<HeaderCellProps> = ({ column }) => {
-  // const [isHovered, setIsHovered] = useState(false);
-  // const { params, handleUpdateSearchParams } = useSearchParamsMap();
+  const [isHovered, setIsHovered] = useState(false);
+  const { params, handleUpdateSearchParams } = useSearchParamsMap();
 
-  // const { orderBy } = params;
+  const { orderBy } = params as { orderBy?: string };
 
-  // const { orderDirection, orderKey } = useMemo(() => {
-  //   const direction = orderBy && orderBy[0] === "-" ? "desc" : "asc";
-  //   const key = orderBy && orderBy[0] === "-" ? orderBy.slice(1) : orderBy;
+  const { orderDirection, orderKey } = useMemo(() => {
+    const direction = orderBy && orderBy[0] === "-" ? "desc" : "asc";
+    const key = orderBy && orderBy[0] === "-" ? orderBy.slice(1) : orderBy;
 
-  //   return { orderDirection: direction, orderKey: key };
-  // }, [orderBy]);
+    return { orderDirection: direction, orderKey: key };
+  }, [orderBy]);
 
-  // const isOrderedColumn = orderKey === column.orderingKey;
+  const isOrderedColumn = orderKey === column.orderingKey;
 
-  // const handleClick = () => {
-  //   const newOrderBy = (() => {
-  //     if (!isOrderedColumn) return column.orderingKey;
-  //     if (orderDirection === "asc") return `-${column.orderingKey}`;
-  //     return null;
-  //   })();
+  const handleClick = () => {
+    if (!column.orderingKey) return;
 
-  //   handleUpdateSearchParams({ newParams: { orderBy: newOrderBy } });
-  // };
+    const newOrderBy = (() => {
+      if (!isOrderedColumn) return column.orderingKey;
+      if (orderDirection === "asc") return `-${column.orderingKey}`;
+      return null;
+    })();
 
-  // const opacity = useMemo(() => {
-  //   if (isOrderedColumn) return 1;
-  //   if (isHovered) return 0.3;
-  //   return 0;
-  // }, [isOrderedColumn, isHovered]);
+    handleUpdateSearchParams({ newParams: { orderBy: newOrderBy } });
+  };
 
-  // return (
-  //   <ButtonBase
-  //     disableRipple
-  //     sx={styles.button}
-  //     onClick={handleClick}
-  //     onMouseEnter={() => setIsHovered(true)}
-  //     onMouseLeave={() => setIsHovered(false)}
-  //   >
-  //     <Box>{column.label}</Box>
+  const opacity = useMemo(() => {
+    if (isOrderedColumn) return 1;
+    if (isHovered) return 0.3;
+    return 0;
+  }, [isOrderedColumn, isHovered]);
 
-  //     <Box
-  //       sx={{
-  //         display: "flex",
-  //         alignItems: "center",
-  //         justifyContent: "center",
-  //         opacity,
-  //       }}
-  //     >
-  //       {(() => {
-  //         if (!isOrderedColumn) {
-  //           return <ArrowUpwardIcon sx={{ fontSize: "1rem" }} />;
-  //         }
+  return (
+    <ButtonBase
+      disableRipple
+      sx={styles.button}
+      onClick={handleClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Box>{column.label}</Box>
 
-  //         if (orderDirection === "asc") {
-  //           return <ArrowUpwardIcon sx={{ fontSize: "1rem" }} />;
-  //         }
+      {column.orderingKey && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            opacity,
+          }}
+        >
+          {(() => {
+            if (!isOrderedColumn) {
+              return <ArrowUpwardIcon sx={{ fontSize: "1rem" }} />;
+            }
 
-  //         return <ArrowDownwardIcon sx={{ fontSize: "1rem" }} />;
-  //       })()}
-  //     </Box>
-  //   </ButtonBase>
-  // );
+            if (orderDirection === "asc") {
+              return <ArrowUpwardIcon sx={{ fontSize: "1rem" }} />;
+            }
 
-  return <Box>{column.label}</Box>;
+            return <ArrowDownwardIcon sx={{ fontSize: "1rem" }} />;
+          })()}
+        </Box>
+      )}
+    </ButtonBase>
+  );
 };
 
 export default HeaderCell;

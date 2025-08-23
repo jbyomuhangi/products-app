@@ -11,7 +11,7 @@ interface ProductsPageProps {
 }
 
 const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
-  const { page, rowsPerPage } = await searchParams;
+  const { page, rowsPerPage, orderBy } = await searchParams;
 
   /** Validate search params */
   if (!isInteger(page) || !isInteger(rowsPerPage)) {
@@ -22,9 +22,11 @@ const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
   const parsedRowsPerPage = parseInt(rowsPerPage as string);
   const skipValue = parsedPage * parsedRowsPerPage;
 
+  const orderByQuery = orderBy ? `&orderBy=${orderBy}` : "";
+
   /** Fetch data from backend */
   const attributes = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products?offset=${skipValue}&limit=${rowsPerPage}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products?offset=${skipValue}&limit=${rowsPerPage}${orderByQuery}`
   );
 
   const { data, error }: ProductApiResponse = await attributes.json();

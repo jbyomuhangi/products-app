@@ -4,6 +4,11 @@ import { useCallback, useMemo } from "react";
 
 import useValueRef from "./useValueRef";
 
+type HandleUpdateSearchParamsArgs = {
+  newParams: Record<string, string | null>;
+  shouldReplace?: boolean;
+};
+
 const useSearchParamsMap = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -20,13 +25,7 @@ const useSearchParamsMap = () => {
   });
 
   const handleUpdateSearchParams = useCallback(
-    ({
-      newParams,
-      shouldReplace,
-    }: {
-      newParams: Record<string, string>;
-      shouldReplace?: boolean;
-    }) => {
+    ({ newParams, shouldReplace }: HandleUpdateSearchParamsArgs) => {
       const { params, router, pathname } = valueRefs.current;
 
       const newSearchParams = new URLSearchParams();
@@ -35,9 +34,7 @@ const useSearchParamsMap = () => {
         : { ...params, ...newParams };
 
       Object.entries(finalParams).forEach(([key, value]) => {
-        if (finalParams[key] !== null && finalParams[key] !== undefined) {
-          newSearchParams.set(key, value);
-        }
+        if (value) newSearchParams.set(key, value);
       });
 
       const searchString = newSearchParams.toString();

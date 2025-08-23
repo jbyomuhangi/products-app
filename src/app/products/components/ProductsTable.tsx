@@ -18,6 +18,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ data, totalCount }) => {
       {
         id: "id",
         label: "ID",
+        orderingKey: "id",
         CellRenderer: ({ item }) => {
           return <Box>{item.id}</Box>;
         },
@@ -26,6 +27,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ data, totalCount }) => {
       {
         id: "skuId",
         label: "SKU ID",
+        orderingKey: "skuId",
         CellRenderer: ({ item }) => {
           return <Box>{item.skuId}</Box>;
         },
@@ -34,6 +36,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ data, totalCount }) => {
       {
         id: "createdAt",
         label: "Created At",
+        orderingKey: "createdAt",
         CellRenderer: ({ item }) => {
           return <DateCell millisecondTime={item.createdAt} />;
         },
@@ -42,6 +45,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ data, totalCount }) => {
       {
         id: "updatedAt",
         label: "Updated At",
+        orderingKey: "updatedAt",
         CellRenderer: ({ item }) => {
           return <DateCell millisecondTime={item.updatedAt} />;
         },
