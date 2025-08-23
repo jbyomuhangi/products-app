@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { ProductApiData } from "@/app/types/product";
+import { ProductApiData, ProductApiResponse } from "@/app/types/product";
 import { ProductQuery } from "@/app/types/query-engine/product";
 import { DataLoader } from "@/app/utils/dataLoader";
 import { ProductQueryEngine } from "@/app/utils/query-engine/products";
@@ -33,6 +33,7 @@ export const GET = async (request: NextRequest) => {
       },
     });
 
+    /** Remove any unneeded data from result we send */
     const results: ProductApiData[] = result.data.map((product) => {
       return {
         id: product.id,
@@ -42,13 +43,12 @@ export const GET = async (request: NextRequest) => {
       };
     });
 
-    const data = {
-      results,
-      pagination: result.pagination,
-      total: result.total,
+    const responseData: ProductApiResponse = {
+      data: { results, pagination: result.pagination, total: result.total },
+      error: undefined,
     };
 
-    return NextResponse.json({ data });
+    return NextResponse.json(responseData);
   } catch (error) {
     console.error("Error processing products query:", error);
     return NextResponse.json(
