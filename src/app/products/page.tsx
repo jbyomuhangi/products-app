@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { redirect } from "next/navigation";
 
-import { ProductApiResponse } from "@/app/types/product";
+import { ProductApiResponse } from "@/app/api/types/product";
 import PageHeader from "@/components/PageHeader";
 import isInteger from "@/utils/validationUtils/isNumber";
 import ProductsTable from "./components/ProductsTable";
