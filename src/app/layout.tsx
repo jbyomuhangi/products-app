@@ -1,5 +1,7 @@
+import clsx from "clsx";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,18 +19,18 @@ export const metadata: Metadata = {
   description: "My App",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
+}
+
+const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={clsx(geistSans.variable, geistMono.variable)}>
         {children}
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
