@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import {
   Box,
@@ -14,6 +14,8 @@ import {
 
 // import useSearchParamsMap from "@/hooks/useSearchParamsMap";
 // import { emptyObject } from "@/utils/noOpUtils";
+import useSearchParamsMap from "@/hooks/useSearchParamsMap";
+import { useMemo } from "react";
 import HeaderCell, { Column } from "./Cells/HeaderCell";
 
 export interface DataTableColumn<T = any> extends Column {
@@ -24,6 +26,7 @@ export interface DataTableColumn<T = any> extends Column {
 interface DataTableProps<T = any> {
   data: T[];
   columns: DataTableColumn<T>[];
+  totalCount: number;
   tableRowDataKey?: string;
   isPaginationShown?: boolean;
 }
@@ -31,30 +34,34 @@ interface DataTableProps<T = any> {
 const DataTable = <T extends Record<string, any>>({
   columns,
   data,
+  totalCount,
   tableRowDataKey = "id",
   isPaginationShown = true,
   // TablePaginationProps = emptyObject,
 }: DataTableProps<T>) => {
-  // const { params, handleUpdateSearchParams } = useSearchParamsMap();
+  const { params, handleUpdateSearchParams } = useSearchParamsMap();
 
-  // const handleChangePage = (event, newPage) => {
-  //   handleUpdateSearchParams({ newParams: { page: newPage } });
-  // };
+  const handleChangePage = (event: unknown, newPage: number) => {
+    handleUpdateSearchParams({ newParams: { page: String(newPage) } });
+  };
 
-  // const handleChangeRowsPerPage = (event) => {
-  //   handleUpdateSearchParams({
-  //     newParams: { page: 0, rowsPerPage: event.target.value },
-  //   });
-  // };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    handleUpdateSearchParams({
+      newParams: { page: "0", rowsPerPage: String(event.target.value) },
+    });
+  };
 
-  // const { page, rowsPerPage } = useMemo(() => {
-  //   return {
-  //     page: parseInt(params.page),
-  //     rowsPerPage: parseInt(params.rowsPerPage),
-  //   };
-  // }, [params]);
+  const { page, rowsPerPage } = useMemo(() => {
+    return {
+      page: parseInt(params.page),
+      rowsPerPage: parseInt(params.rowsPerPage),
+    };
+  }, [params]);
 
   const hasData = data.length > 0;
+  const shouldShowPagination = isPaginationShown && hasData;
 
   return (
     <Box>
@@ -113,17 +120,18 @@ const DataTable = <T extends Record<string, any>>({
         </Table>
       </TableContainer>
 
-      {/* {isPaginationShown && hasData && (
+      {shouldShowPagination && (
         <TablePagination
           component="div"
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 20, 50, 100]}
           rowsPerPage={rowsPerPage}
           page={page}
+          count={totalCount}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          {...TablePaginationProps}
+          // {...TablePaginationProps}
         />
-      )} */}
+      )}
     </Box>
   );
 };

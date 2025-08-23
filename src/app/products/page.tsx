@@ -1,56 +1,38 @@
 import { Box } from "@mui/material";
+import { redirect } from "next/navigation";
 
-import { ProductApiData, ProductApiResponse } from "@/app/types/product";
-import DateCell from "@/components/DataTable/Cells/DateCell";
-import DataTable, { DataTableColumn } from "@/components/DataTable/DataTable";
+import { ProductApiResponse } from "@/app/types/product";
 import PageHeader from "@/components/PageHeader";
+import isInteger from "@/utils/validationUtils/isNumber";
+import ProductsTable from "./components/ProductsTable";
 
-const ProductsPage = async () => {
+interface ProductsPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
+  const { page, rowsPerPage } = await searchParams;
+
+  if (!isInteger(page) || !isInteger(rowsPerPage)) {
+    redirect("/products?page=1&rowsPerPage=10");
+  }
+
   const attributes = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products?offset=${page}&limit=${rowsPerPage}`
   );
 
   const { data, error }: ProductApiResponse = await attributes.json();
-
-  const columns: DataTableColumn<ProductApiData>[] = [
-    {
-      id: "id",
-      label: "ID",
-      CellRenderer: ({ item }) => {
-        return <Box>{item.id}</Box>;
-      },
-    },
-
-    {
-      id: "skuId",
-      label: "SKU ID",
-      CellRenderer: ({ item }) => {
-        return <Box>{item.skuId}</Box>;
-      },
-    },
-
-    {
-      id: "createdAt",
-      label: "Created At",
-      CellRenderer: ({ item }) => {
-        return <DateCell millisecondTime={item.createdAt} />;
-      },
-    },
-
-    {
-      id: "updatedAt",
-      label: "Updated At",
-      CellRenderer: ({ item }) => {
-        return <DateCell millisecondTime={item.updatedAt} />;
-      },
-    },
-  ];
 
   return (
     <Box>
       <PageHeader title="Products" />
 
-      <DataTable columns={columns} data={error ? [] : data.results} />
+      <Box sx={{ padding: "8px", marginBottom: "10px" }}>
+        <ProductsTable
+          data={error ? [] : data.results}
+          totalCount={data?.total || 0}
+        />
+      </Box>
     </Box>
   );
 };
