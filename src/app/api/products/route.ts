@@ -51,10 +51,13 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(responseData);
   } catch (error) {
     console.error("Error processing products query:", error);
-    return NextResponse.json(
-      { error: { message: "Failed to process products query" } },
-      { status: 500 }
-    );
+
+    const responseData: ProductApiResponse = {
+      data: undefined,
+      error: { message: "Failed to process products query" },
+    };
+
+    return NextResponse.json(responseData, { status: 500 });
   }
 };
 

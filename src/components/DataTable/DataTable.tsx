@@ -8,27 +8,27 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
+  TablePaginationBaseProps,
   TableRow,
 } from "@mui/material";
-// import { useMemo } from "react";
 
-// import useSearchParamsMap from "@/hooks/useSearchParamsMap";
-// import { emptyObject } from "@/utils/noOpUtils";
 import useSearchParamsMap from "@/hooks/useSearchParamsMap";
+import { emptyObject } from "@/utils/noopUtils";
 import { useMemo } from "react";
 import HeaderCell, { Column } from "./Cells/HeaderCell";
 
-export interface DataTableColumn<T = any> extends Column {
+export interface DataTableColumn<T> extends Column {
   HeaderRenderer?: React.FC<{ column: Column }>;
   CellRenderer?: React.FC<{ item: T }>;
 }
 
-interface DataTableProps<T = any> {
+interface DataTableProps<T> {
   data: T[];
   columns: DataTableColumn<T>[];
   totalCount: number;
   tableRowDataKey?: string;
   isPaginationShown?: boolean;
+  TablePaginationProps?: TablePaginationBaseProps;
 }
 
 const DataTable = <T extends Record<string, any>>({
@@ -37,7 +37,7 @@ const DataTable = <T extends Record<string, any>>({
   totalCount,
   tableRowDataKey = "id",
   isPaginationShown = true,
-  // TablePaginationProps = emptyObject,
+  TablePaginationProps = emptyObject,
 }: DataTableProps<T>) => {
   const { params, handleUpdateSearchParams } = useSearchParamsMap();
 
@@ -59,6 +59,10 @@ const DataTable = <T extends Record<string, any>>({
       rowsPerPage: parseInt(params.rowsPerPage),
     };
   }, [params]);
+
+  const rowsPerPageOptions = useMemo(() => {
+    return [10, 20, 50, 100];
+  }, []);
 
   const hasData = data.length > 0;
   const shouldShowPagination = isPaginationShown && hasData;
@@ -123,13 +127,13 @@ const DataTable = <T extends Record<string, any>>({
       {shouldShowPagination && (
         <TablePagination
           component="div"
-          rowsPerPageOptions={[10, 20, 50, 100]}
+          rowsPerPageOptions={rowsPerPageOptions}
           rowsPerPage={rowsPerPage}
           page={page}
           count={totalCount}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          // {...TablePaginationProps}
+          {...TablePaginationProps}
         />
       )}
     </Box>

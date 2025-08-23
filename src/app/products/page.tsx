@@ -13,12 +13,18 @@ interface ProductsPageProps {
 const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
   const { page, rowsPerPage } = await searchParams;
 
+  /** Validate search params */
   if (!isInteger(page) || !isInteger(rowsPerPage)) {
-    redirect("/products?page=1&rowsPerPage=10");
+    redirect("/products?page=0&rowsPerPage=100");
   }
 
+  const parsedPage = parseInt(page as string);
+  const parsedRowsPerPage = parseInt(rowsPerPage as string);
+  const skipValue = parsedPage * parsedRowsPerPage;
+
+  /** Fetch data from backend */
   const attributes = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products?offset=${page}&limit=${rowsPerPage}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products?offset=${skipValue}&limit=${rowsPerPage}`
   );
 
   const { data, error }: ProductApiResponse = await attributes.json();
@@ -30,7 +36,7 @@ const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
       <Box sx={{ padding: "8px", marginBottom: "10px" }}>
         <ProductsTable
           data={error ? [] : data.results}
-          totalCount={data?.total || 0}
+          totalCount={error ? 0 : data.total}
         />
       </Box>
     </Box>

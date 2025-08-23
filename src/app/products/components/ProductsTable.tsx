@@ -7,13 +7,12 @@ import { ProductApiData } from "@/app/types/product";
 import DateCell from "@/components/DataTable/Cells/DateCell";
 import DataTable, { DataTableColumn } from "@/components/DataTable/DataTable";
 
-const ProductsTable = ({
-  data,
-  totalCount,
-}: {
+interface ProductsTableProps {
   data: ProductApiData[];
   totalCount: number;
-}) => {
+}
+
+const ProductsTable: React.FC<ProductsTableProps> = ({ data, totalCount }) => {
   const columns: DataTableColumn<ProductApiData>[] = useMemo(() => {
     return [
       {
