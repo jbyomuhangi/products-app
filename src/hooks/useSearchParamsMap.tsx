@@ -1,5 +1,7 @@
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { useCallback, useMemo } from "react";
+
 import useValueRef from "./useValueRef";
 
 const useSearchParamsMap = () => {
