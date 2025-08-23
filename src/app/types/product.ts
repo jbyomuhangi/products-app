@@ -17,3 +17,10 @@ export interface Product {
   createdAt: number;
   attributes: ProductAttribute[];
 }
+
+export interface ProductApiData {
+  id: string;
+  skuId: string;
+  updatedAt: number;
+  createdAt: number;
+}
