@@ -1,7 +1,8 @@
-import { NextRequest } from "next/server";
-import { ProductQueryEngine } from "@/app/utils/query-engine/products";
-import { DataLoader } from "@/app/utils/dataLoader";
+import { NextRequest, NextResponse } from "next/server";
+
 import { ProductQuery } from "@/app/types/query-engine/product";
+import { DataLoader } from "@/app/utils/dataLoader";
+import { ProductQueryEngine } from "@/app/utils/query-engine/products";
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,10 +24,16 @@ export async function POST(request: NextRequest) {
       pagination,
     });
 
-    return Response.json(result);
+    const data = {
+      results: result.data,
+      pagination: result.pagination,
+      total: result.total,
+    };
+
+    return NextResponse.json({ data });
   } catch (error) {
     console.error("Error processing products query:", error);
-    return Response.json(
+    return NextResponse.json(
       { error: "Failed to process products query" },
       { status: 500 }
     );

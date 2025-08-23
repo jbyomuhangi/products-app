@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SupplierAttributeQueryEngine } from "@/app/utils/query-engine/attributes";
-import { DataLoader } from "@/app/utils/dataLoader";
+
 import { SupplierAttributeQuery } from "@/app/types/query-engine/attribute";
+import { DataLoader } from "@/app/utils/dataLoader";
+import { SupplierAttributeQueryEngine } from "@/app/utils/query-engine/attributes";
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,7 +24,13 @@ export async function POST(request: NextRequest) {
       pagination,
     });
 
-    return Response.json(result);
+    const data = {
+      results: result.data,
+      pagination: result.pagination,
+      total: result.total,
+    };
+
+    return NextResponse.json({ data });
   } catch (error) {
     console.error("Error processing attributes query:", error);
     return NextResponse.json(
