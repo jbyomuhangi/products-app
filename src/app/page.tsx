@@ -1,3 +1,11 @@
-export default async function Home() {
-  return <main>Hello world</main>;
-}
+import Box from "@mui/material/Box";
+
+const Home = () => {
+  return (
+    <Box>
+      <Box component="p"> hello world</Box>
+    </Box>
+  );
+};
+
+export default Home;
