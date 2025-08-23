@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { ProductApiData, ProductApiResponse } from "@/app/types/product";
-import { DataLoader } from "@/app/utils/dataLoader";
-import { ProductQueryEngine } from "@/app/utils/query-engine/products";
+import { ProductApiData, ProductApiResponse } from "@/app/api/types/product";
+import { DataLoader } from "@/app/api/utils/dataLoader";
+import { ProductQueryEngine } from "@/app/api/utils/query-engine/products";
 import isInteger from "@/utils/validationUtils/isNumber";
 
 export const GET = async (request: NextRequest) => {

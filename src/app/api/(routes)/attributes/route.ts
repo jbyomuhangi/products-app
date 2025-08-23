@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { SupplierAttributeQuery } from "@/app/types/query-engine/attribute";
-import { DataLoader } from "@/app/utils/dataLoader";
-import { SupplierAttributeQueryEngine } from "@/app/utils/query-engine/attributes";
+import { SupplierAttributeQuery } from "@/app/api/types/query-engine/attribute";
+import { DataLoader } from "@/app/api/utils/dataLoader";
+import { SupplierAttributeQueryEngine } from "@/app/api/utils/query-engine/attributes";
 
 export async function POST(request: NextRequest) {
   try {

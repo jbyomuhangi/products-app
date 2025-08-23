@@ -3,7 +3,7 @@
 import { Box } from "@mui/material";
 import { useMemo } from "react";
 
-import { ProductApiData } from "@/app/types/product";
+import { ProductApiData } from "@/app/api/types/product";
 import DateCell from "@/components/DataTable/Cells/DateCell";
 import DataTable, { DataTableColumn } from "@/components/DataTable/DataTable";
 
