@@ -1,11 +1,9 @@
-import Box from "@mui/material/Box";
+import { redirect } from "next/navigation";
 
 const Home = () => {
-  return (
-    <Box>
-      <Box component="p"> hello world</Box>
-    </Box>
-  );
+  redirect("/products");
+
+  return null;
 };
 
 export default Home;

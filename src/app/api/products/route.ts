@@ -30,7 +30,7 @@ export const GET = async (request: NextRequest) => {
   } catch (error) {
     console.error("Error processing products query:", error);
     return NextResponse.json(
-      { error: "Failed to process products query" },
+      { error: { message: "Failed to process products query" } },
       { status: 500 }
     );
   }
