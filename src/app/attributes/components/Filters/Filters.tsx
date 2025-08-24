@@ -28,11 +28,15 @@ const Filters = () => {
   }, []);
 
   const typeValue = useMemo(() => {
-    return typeFilterOptions.find((option) => option.value === params.type);
+    return (
+      typeFilterOptions.find((option) => option.value === params.type) || null
+    );
   }, [params.type, typeFilterOptions]);
 
   const groupValue = useMemo(() => {
-    return groupFilterOptions.find((option) => option.value === params.group);
+    return (
+      groupFilterOptions.find((option) => option.value === params.group) || null
+    );
   }, [params.group, groupFilterOptions]);
 
   return (
