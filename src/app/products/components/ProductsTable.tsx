@@ -4,8 +4,10 @@ import { Box } from "@mui/material";
 import { useMemo } from "react";
 
 import { ProductApiData } from "@/app/api/types/product";
+import ClientErrorBoundary from "@/components/ClientErrorBoundary";
 import DataTable, { DataTableColumn } from "@/components/DataTable";
 import DateCell from "@/components/DataTable/Cells/DateCell";
+import ErrorBoundaryFallback from "@/components/ErrorBoundaryFallback";
 
 interface ProductsTableProps {
   data: ProductApiData[];
@@ -53,7 +55,13 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ data, totalCount }) => {
     ];
   }, []);
 
-  return <DataTable columns={columns} data={data} totalCount={totalCount} />;
+  return (
+    <ClientErrorBoundary
+      ErrorBoundaryProps={{ fallback: <ErrorBoundaryFallback /> }}
+    >
+      <DataTable columns={columns} data={data} totalCount={totalCount} />;
+    </ClientErrorBoundary>
+  );
 };
 
 export default ProductsTable;

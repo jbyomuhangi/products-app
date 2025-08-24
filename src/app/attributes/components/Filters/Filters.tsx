@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import Select from "react-select";
 
+import ClientErrorBoundary from "@/components/ClientErrorBoundary";
 import { AttributeFieldType, AttributeGroup } from "@/enums/attribute";
 import useIsMounted from "@/hooks/useIsMounted";
 import useSearchParamsMap from "@/hooks/useSearchParamsMap";
@@ -48,36 +49,42 @@ const Filters = () => {
         alignItems: "center",
       }}
     >
-      <NameFilter />
+      <ClientErrorBoundary>
+        <NameFilter />
+      </ClientErrorBoundary>
 
       {isMounted && (
-        <Box sx={{ width: "200px" }}>
-          <Select
-            isClearable
-            value={typeValue}
-            options={typeFilterOptions}
-            onChange={(newValue) => {
-              handleUpdateSearchParams({
-                newParams: { type: newValue?.value ?? null },
-              });
-            }}
-          />
-        </Box>
+        <ClientErrorBoundary>
+          <Box sx={{ width: "200px" }}>
+            <Select
+              isClearable
+              value={typeValue}
+              options={typeFilterOptions}
+              onChange={(newValue) => {
+                handleUpdateSearchParams({
+                  newParams: { type: newValue?.value ?? null },
+                });
+              }}
+            />
+          </Box>
+        </ClientErrorBoundary>
       )}
 
       {isMounted && (
-        <Box sx={{ width: "200px" }}>
-          <Select
-            isClearable
-            value={groupValue}
-            options={groupFilterOptions}
-            onChange={(newValue) => {
-              handleUpdateSearchParams({
-                newParams: { group: newValue?.value ?? null },
-              });
-            }}
-          />
-        </Box>
+        <ClientErrorBoundary>
+          <Box sx={{ width: "200px" }}>
+            <Select
+              isClearable
+              value={groupValue}
+              options={groupFilterOptions}
+              onChange={(newValue) => {
+                handleUpdateSearchParams({
+                  newParams: { group: newValue?.value ?? null },
+                });
+              }}
+            />
+          </Box>
+        </ClientErrorBoundary>
       )}
     </Box>
   );

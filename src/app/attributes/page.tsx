@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 import { AttributeApiResponse } from "@/app/api/types/attribute";
+import ClientErrorBoundary from "@/components/ClientErrorBoundary";
+import ErrorBoundaryFallback from "@/components/ErrorBoundaryFallback";
 import PageHeader from "@/components/PageHeader";
 import isInteger from "@/utils/validationUtils/isNumber";
 import AttributesTable from "./components/AttributesTable";
@@ -45,12 +47,18 @@ const AttributesPage = async ({ searchParams }: ProductsPageProps) => {
       <PageHeader title="Attributes" />
 
       <Box sx={{ padding: "8px", marginBottom: "10px" }}>
-        <Filters />
+        <ClientErrorBoundary>
+          <Filters />
+        </ClientErrorBoundary>
 
-        <AttributesTable
-          data={error ? [] : data.results}
-          totalCount={error ? 0 : data.total}
-        />
+        <ClientErrorBoundary
+          ErrorBoundaryProps={{ fallback: <ErrorBoundaryFallback /> }}
+        >
+          <AttributesTable
+            data={error ? [] : data.results}
+            totalCount={error ? 0 : data.total}
+          />
+        </ClientErrorBoundary>
       </Box>
     </Box>
   );

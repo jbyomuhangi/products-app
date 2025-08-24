@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import Link from "next/link";
+
 import NavButton from "./NavButton";
 
 const NavBar = () => {

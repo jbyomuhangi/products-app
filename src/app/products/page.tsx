@@ -2,6 +2,8 @@ import { Box } from "@mui/material";
 import { redirect } from "next/navigation";
 
 import { ProductApiResponse } from "@/app/api/types/product";
+import ClientErrorBoundary from "@/components/ClientErrorBoundary";
+import ErrorBoundaryFallback from "@/components/ErrorBoundaryFallback";
 import PageHeader from "@/components/PageHeader";
 import isInteger from "@/utils/validationUtils/isNumber";
 import Filters from "./components/Filters";
@@ -44,10 +46,14 @@ const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
       <Box sx={{ padding: "8px", marginBottom: "10px" }}>
         <Filters />
 
-        <ProductsTable
-          data={error ? [] : data.results}
-          totalCount={error ? 0 : data.total}
-        />
+        <ClientErrorBoundary
+          ErrorBoundaryProps={{ fallback: <ErrorBoundaryFallback /> }}
+        >
+          <ProductsTable
+            data={error ? [] : data.results}
+            totalCount={error ? 0 : data.total}
+          />
+        </ClientErrorBoundary>
       </Box>
     </Box>
   );

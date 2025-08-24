@@ -4,8 +4,10 @@ import { Box } from "@mui/material";
 import { useMemo } from "react";
 
 import { AttributeApiData } from "@/app/api/types/attribute";
+import ClientErrorBoundary from "@/components/ClientErrorBoundary";
 import DataTable, { DataTableColumn } from "@/components/DataTable";
 import DateCell from "@/components/DataTable/Cells/DateCell";
+import ErrorBoundaryFallback from "@/components/ErrorBoundaryFallback";
 
 interface AttributesTableProps {
   data: AttributeApiData[];
@@ -83,7 +85,13 @@ const AttributesTable: React.FC<AttributesTableProps> = ({
     ];
   }, []);
 
-  return <DataTable columns={columns} data={data} totalCount={totalCount} />;
+  return (
+    <ClientErrorBoundary
+      ErrorBoundaryProps={{ fallback: <ErrorBoundaryFallback /> }}
+    >
+      <DataTable columns={columns} data={data} totalCount={totalCount} />;
+    </ClientErrorBoundary>
+  );
 };
 
 export default AttributesTable;

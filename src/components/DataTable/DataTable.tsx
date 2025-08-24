@@ -10,9 +10,11 @@ import {
   TablePaginationBaseProps,
   TableRow,
 } from "@mui/material";
-
-import useSearchParamsMap from "@/hooks/useSearchParamsMap";
 import { useMemo } from "react";
+
+import ClientErrorBoundary from "@/components/ClientErrorBoundary";
+import ErrorBoundaryFallback from "@/components/ErrorBoundaryFallback";
+import useSearchParamsMap from "@/hooks/useSearchParamsMap";
 import HeaderCell, { Column } from "./Cells/HeaderCell";
 
 export interface DataTableColumn<T> extends Column {
@@ -82,7 +84,11 @@ const DataTable = <T extends Record<string, any>>({
 
               return (
                 <TableCell key={column.id}>
-                  <HeaderRenderer column={otherProps} />
+                  <ClientErrorBoundary
+                    ErrorBoundaryProps={{ fallback: <ErrorBoundaryFallback /> }}
+                  >
+                    <HeaderRenderer column={otherProps} />
+                  </ClientErrorBoundary>
                 </TableCell>
               );
             })}
@@ -106,7 +112,9 @@ const DataTable = <T extends Record<string, any>>({
 
                     return (
                       <TableCell key={column.id}>
-                        {CellRenderer && <CellRenderer item={item} />}
+                        <ClientErrorBoundary>
+                          {CellRenderer && <CellRenderer item={item} />}
+                        </ClientErrorBoundary>
                       </TableCell>
                     );
                   })}
