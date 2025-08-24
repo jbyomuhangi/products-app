@@ -15,7 +15,10 @@ const useSearchParamsMap = () => {
   const pathname = usePathname();
 
   const params = useMemo(() => {
-    return Object.fromEntries(searchParams);
+    return Object.fromEntries(searchParams) as Record<
+      string,
+      string | undefined
+    >;
   }, [searchParams]);
 
   const valueRefs = useValueRef({

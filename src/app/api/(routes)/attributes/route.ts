@@ -21,6 +21,7 @@ export const GET = async (request: NextRequest) => {
     const orderBy = searchParams.get("orderBy");
     const group = searchParams.get("group");
     const type = searchParams.get("type");
+    const name = searchParams.get("name");
 
     const parsedOffset = offset ? parseInt(offset) : null;
     const parsedLimit = limit ? parseInt(limit) : null;
@@ -46,6 +47,7 @@ export const GET = async (request: NextRequest) => {
 
       if (group) returnObj.group = { $eq: group };
       if (type) returnObj.type = { $eq: type };
+      if (name) returnObj.name = { $regex: name };
 
       return returnObj;
     })();

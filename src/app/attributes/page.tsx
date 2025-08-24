@@ -13,7 +13,7 @@ interface ProductsPageProps {
 }
 
 const AttributesPage = async ({ searchParams }: ProductsPageProps) => {
-  const { page, rowsPerPage, orderBy, group, type } = await searchParams;
+  const { page, rowsPerPage, orderBy, group, type, name } = await searchParams;
 
   /** Validate search params */
   if (!isInteger(page) || !isInteger(rowsPerPage)) {
@@ -27,10 +27,11 @@ const AttributesPage = async ({ searchParams }: ProductsPageProps) => {
   const orderByQuery = orderBy ? `&orderBy=${orderBy}` : "";
   const groupQuery = group ? `&group=${group}` : "";
   const typeQuery = type ? `&type=${type}` : "";
+  const nameQuery = name ? `&name=${name}` : "";
 
   /** Fetch data from backend */
   const attributes = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/attributes?offset=${skipValue}&limit=${rowsPerPage}${orderByQuery}${groupQuery}${typeQuery}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/attributes?offset=${skipValue}&limit=${rowsPerPage}${orderByQuery}${groupQuery}${typeQuery}${nameQuery}`
   );
 
   const { data, error }: AttributeApiResponse = await attributes.json();

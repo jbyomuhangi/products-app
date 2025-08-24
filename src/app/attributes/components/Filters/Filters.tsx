@@ -7,6 +7,7 @@ import { AttributeFieldType, AttributeGroup } from "@/enums/attribute";
 import useIsMounted from "@/hooks/useIsMounted";
 import useSearchParamsMap from "@/hooks/useSearchParamsMap";
 import { Box } from "@mui/material";
+import NameFilter from "./NameFilter";
 
 const Filters = () => {
   const isMounted = useIsMounted();
@@ -35,7 +36,16 @@ const Filters = () => {
   }, [params.group, groupFilterOptions]);
 
   return (
-    <Box sx={{ display: "flex", gap: "10px", padding: "10px 0px" }}>
+    <Box
+      sx={{
+        display: "flex",
+        gap: "10px",
+        padding: "10px 0px",
+        alignItems: "center",
+      }}
+    >
+      <NameFilter />
+
       {isMounted && (
         <Box sx={{ width: "200px" }}>
           <Select
