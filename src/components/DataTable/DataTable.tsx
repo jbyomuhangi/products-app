@@ -5,7 +5,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TablePagination,
   TablePaginationBaseProps,
@@ -13,7 +12,6 @@ import {
 } from "@mui/material";
 
 import useSearchParamsMap from "@/hooks/useSearchParamsMap";
-import { emptyObject } from "@/utils/noopUtils";
 import { useMemo } from "react";
 import HeaderCell, { Column } from "./Cells/HeaderCell";
 
@@ -37,7 +35,7 @@ const DataTable = <T extends Record<string, any>>({
   totalCount,
   tableRowDataKey = "id",
   isPaginationShown = true,
-  TablePaginationProps = emptyObject,
+  TablePaginationProps,
 }: DataTableProps<T>) => {
   const { params, handleUpdateSearchParams } = useSearchParamsMap();
 
