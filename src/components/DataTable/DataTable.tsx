@@ -29,6 +29,7 @@ interface DataTableProps<T> {
   TablePaginationProps?: TablePaginationBaseProps;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DataTable = <T extends Record<string, any>>({
   columns,
   data,
@@ -53,8 +54,8 @@ const DataTable = <T extends Record<string, any>>({
 
   const { page, rowsPerPage } = useMemo(() => {
     return {
-      page: parseInt(params.page),
-      rowsPerPage: parseInt(params.rowsPerPage),
+      page: parseInt(params.page || ""),
+      rowsPerPage: parseInt(params.rowsPerPage || ""),
     };
   }, [params]);
 

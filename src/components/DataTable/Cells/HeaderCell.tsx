@@ -20,6 +20,7 @@ export interface Column {
   id: string;
   label: string;
   orderingKey?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
