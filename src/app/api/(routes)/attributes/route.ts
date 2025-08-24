@@ -1,41 +1,82 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { SupplierAttributeQuery } from "@/app/api/types/query-engine/attribute";
+import {
+  AttributeApiData,
+  AttributeApiResponse,
+} from "@/app/api/types/attribute";
+import { InternalQuerySort } from "@/app/api/types/query-engine/common";
 import { DataLoader } from "@/app/api/utils/dataLoader";
 import { SupplierAttributeQueryEngine } from "@/app/api/utils/query-engine/attributes";
+import isInteger from "@/utils/validationUtils/isNumber";
 
-export async function POST(request: NextRequest) {
+export const GET = async (request: NextRequest) => {
   try {
-    let body: SupplierAttributeQuery | null = null;
+    /** Extract and parse search params */
+    const { searchParams } = new URL(request.url);
+    const offset = searchParams.get("offset");
+    const limit = searchParams.get("limit");
+    const orderBy = searchParams.get("orderBy");
 
-    if (request.headers.get("content-length") === "0") {
-      body = null;
-    } else {
-      body = await request.json();
+    const parsedOffset = offset ? parseInt(offset) : null;
+    const parsedLimit = limit ? parseInt(limit) : null;
+
+    const sort: InternalQuerySort | undefined = (() => {
+      if (!orderBy) return undefined;
+
+      const direction = orderBy[0] === "-" ? "DESC" : "ASC";
+      const field = orderBy[0] === "-" ? orderBy.slice(1) : orderBy;
+      return { field, order: direction };
+    })();
+
+    /** Validate search params */
+    if (!isInteger(parsedOffset) || !isInteger(parsedLimit)) {
+      return NextResponse.json(
+        { error: "Invalid offset or limit" },
+        { status: 400 }
+      );
     }
-
-    const { filter, sort, pagination } = body ?? {};
 
     const attributes = DataLoader.getAttributes();
     const queryEngine = new SupplierAttributeQueryEngine(attributes);
     const result = await queryEngine.query({
-      filter,
       sort,
-      pagination,
+      pagination: {
+        offset: parsedOffset as number,
+        limit: parsedLimit as number,
+      },
     });
 
-    const data = {
-      results: result.data,
-      pagination: result.pagination,
-      total: result.total,
+    /** Remove any unneeded data from result we send */
+    const results: AttributeApiData[] = result.data.map((attribute) => {
+      return {
+        id: attribute.id,
+        createdAt: attribute.createdAt,
+        updatedAt: attribute.updatedAt,
+        type: attribute.type,
+        name: attribute.name,
+        group: attribute.group,
+        description: attribute.description,
+      };
+    });
+
+    const responseData: AttributeApiResponse = {
+      data: {
+        results,
+        pagination: result.pagination,
+        total: result.total,
+      },
+      error: undefined,
     };
 
-    return NextResponse.json({ data });
+    return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
     console.error("Error processing attributes query:", error);
-    return NextResponse.json(
-      { error: "Failed to process attributes query" },
-      { status: 500 }
-    );
+
+    const responseData: AttributeApiResponse = {
+      data: undefined,
+      error: { message: "Failed to process products query" },
+    };
+
+    return NextResponse.json(responseData, { status: 500 });
   }
-}
+};

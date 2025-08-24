@@ -12,6 +12,7 @@ const styles = {
     gap: "10px",
     alignItems: "center",
     justifyContent: "space-between",
+    fontWeight: "bold",
   },
 };
 

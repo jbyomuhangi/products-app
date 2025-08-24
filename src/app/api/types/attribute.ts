@@ -4,6 +4,7 @@
  */
 
 import { AttributeFieldType, AttributeGroup } from "../enums/attribute";
+import { InternalQueryPagination } from "./query-engine/common";
 
 export interface AttributeOption {
   // common
@@ -43,3 +44,31 @@ export interface SupplierAttribute {
   group?: AttributeGroup;
   placeHolder?: string;
 }
+
+export interface AttributeApiData {
+  id: string;
+  createdAt: number;
+  updatedAt: number;
+  type: AttributeFieldType;
+  name: string;
+  group?: AttributeGroup;
+  description?: string;
+}
+
+interface AttributeApiResponseData {
+  data: {
+    results: AttributeApiData[];
+    pagination: InternalQueryPagination;
+    total: number;
+  };
+  error: undefined;
+}
+
+interface AttributeApiResponseError {
+  data: undefined;
+  error: { message: string };
+}
+
+export type AttributeApiResponse =
+  | AttributeApiResponseData
+  | AttributeApiResponseError;

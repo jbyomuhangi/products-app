@@ -58,7 +58,7 @@ export const GET = async (request: NextRequest) => {
       error: undefined,
     };
 
-    return NextResponse.json(responseData);
+    return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
     console.error("Error processing products query:", error);
 
