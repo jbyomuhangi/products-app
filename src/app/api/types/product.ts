@@ -5,9 +5,9 @@
 
 import { InternalQueryPagination } from "./query-engine/common";
 
-export type ProductAttributeValue = string | object | string[] | number | null;
+type ProductAttributeValue = string | object | string[] | number | null;
 
-export interface ProductAttribute {
+interface ProductAttribute {
   key: string;
   value: ProductAttributeValue;
 }

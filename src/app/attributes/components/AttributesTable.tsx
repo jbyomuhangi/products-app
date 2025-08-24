@@ -4,8 +4,8 @@ import { Box } from "@mui/material";
 import { useMemo } from "react";
 
 import { AttributeApiData } from "@/app/api/types/attribute";
+import DataTable, { DataTableColumn } from "@/components/DataTable";
 import DateCell from "@/components/DataTable/Cells/DateCell";
-import DataTable, { DataTableColumn } from "@/components/DataTable/DataTable";
 
 interface AttributesTableProps {
   data: AttributeApiData[];

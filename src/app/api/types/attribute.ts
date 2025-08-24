@@ -6,7 +6,7 @@
 import { AttributeFieldType, AttributeGroup } from "@/enums/attribute";
 import { InternalQueryPagination } from "./query-engine/common";
 
-export interface AttributeOption {
+interface AttributeOption {
   // common
   required?: boolean;
   order?: number;

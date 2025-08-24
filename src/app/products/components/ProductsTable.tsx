@@ -4,8 +4,8 @@ import { Box } from "@mui/material";
 import { useMemo } from "react";
 
 import { ProductApiData } from "@/app/api/types/product";
+import DataTable, { DataTableColumn } from "@/components/DataTable";
 import DateCell from "@/components/DataTable/Cells/DateCell";
-import DataTable, { DataTableColumn } from "@/components/DataTable/DataTable";
 
 interface ProductsTableProps {
   data: ProductApiData[];
