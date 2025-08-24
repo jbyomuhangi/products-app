@@ -9,7 +9,7 @@ import AttributesTable from "./components/AttributesTable";
 import Filters from "./components/Filters";
 
 interface ProductsPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
 const AttributesPage = async ({ searchParams }: ProductsPageProps) => {
@@ -24,14 +24,18 @@ const AttributesPage = async ({ searchParams }: ProductsPageProps) => {
   const parsedRowsPerPage = parseInt(rowsPerPage as string);
   const skipValue = parsedPage * parsedRowsPerPage;
 
-  const orderByQuery = orderBy ? `&orderBy=${orderBy}` : "";
-  const groupQuery = group ? `&group=${group}` : "";
-  const typeQuery = type ? `&type=${type}` : "";
-  const nameQuery = name ? `&name=${name}` : "";
+  const searchParamString = new URLSearchParams({
+    offset: skipValue.toString(),
+    limit: parsedRowsPerPage.toString(),
+    ...(orderBy && { orderBy }),
+    ...(group && { group }),
+    ...(type && { type }),
+    ...(name && { name }),
+  }).toString();
 
   /** Fetch data from backend */
   const attributes = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/attributes?offset=${skipValue}&limit=${rowsPerPage}${orderByQuery}${groupQuery}${typeQuery}${nameQuery}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/attributes?${searchParamString}`
   );
 
   const { data, error }: AttributeApiResponse = await attributes.json();

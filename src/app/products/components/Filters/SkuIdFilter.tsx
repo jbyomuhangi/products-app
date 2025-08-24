@@ -6,31 +6,31 @@ import { useDebounce } from "react-use";
 import TextInput from "@/components/TextInput";
 import useSearchParamsMap from "@/hooks/useSearchParamsMap";
 
-const NameFilter = () => {
+const SkuIdFilter = () => {
   const { params, handleUpdateSearchParams } = useSearchParamsMap();
-  const [name, setName] = useState<string>(params.name || "");
+  const [skuId, setSkuId] = useState<string>(params.skuId || "");
 
   useDebounce(
     () => {
-      const urlParamValue = params.name ?? "";
-      if (name === urlParamValue) return;
-      handleUpdateSearchParams({ newParams: { name: name || null } });
+      const urlParamValue = params.skuId ?? "";
+      if (skuId === urlParamValue) return;
+      handleUpdateSearchParams({ newParams: { skuId: skuId || null } });
     },
     200,
-    [name]
+    [skuId]
   );
 
   return (
     <TextInput
       TextFieldProps={{
-        value: name,
-        placeholder: "Search by name",
+        value: skuId,
+        placeholder: "Search by sku id",
         onChange: (e) => {
-          setName(e.target.value);
+          setSkuId(e.target.value);
         },
       }}
     />
   );
 };
 
-export default NameFilter;
+export default SkuIdFilter;
