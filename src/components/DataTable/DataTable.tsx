@@ -75,7 +75,6 @@ const DataTable = <T extends Record<string, any>>({
             backgroundColor: "#dfeafc",
             position: "sticky",
             top: 0,
-            zIndex: 1,
           }}
         >
           <TableRow>

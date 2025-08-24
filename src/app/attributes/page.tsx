@@ -6,13 +6,14 @@ import { AttributeApiResponse } from "@/app/api/types/attribute";
 import PageHeader from "@/components/PageHeader";
 import isInteger from "@/utils/validationUtils/isNumber";
 import AttributesTable from "./components/AttributesTable";
+import Filters from "./components/Filters";
 
 interface ProductsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 const AttributesPage = async ({ searchParams }: ProductsPageProps) => {
-  const { page, rowsPerPage, orderBy } = await searchParams;
+  const { page, rowsPerPage, orderBy, group, type } = await searchParams;
 
   /** Validate search params */
   if (!isInteger(page) || !isInteger(rowsPerPage)) {
@@ -24,10 +25,12 @@ const AttributesPage = async ({ searchParams }: ProductsPageProps) => {
   const skipValue = parsedPage * parsedRowsPerPage;
 
   const orderByQuery = orderBy ? `&orderBy=${orderBy}` : "";
+  const groupQuery = group ? `&group=${group}` : "";
+  const typeQuery = type ? `&type=${type}` : "";
 
   /** Fetch data from backend */
   const attributes = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/attributes?offset=${skipValue}&limit=${rowsPerPage}${orderByQuery}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/attributes?offset=${skipValue}&limit=${rowsPerPage}${orderByQuery}${groupQuery}${typeQuery}`
   );
 
   const { data, error }: AttributeApiResponse = await attributes.json();
@@ -37,6 +40,8 @@ const AttributesPage = async ({ searchParams }: ProductsPageProps) => {
       <PageHeader title="Attributes" />
 
       <Box sx={{ padding: "8px", marginBottom: "10px" }}>
+        <Filters />
+
         <AttributesTable
           data={error ? [] : data.results}
           totalCount={error ? 0 : data.total}
