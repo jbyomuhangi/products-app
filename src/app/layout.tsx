@@ -5,7 +5,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 
+import NavBar from "@/components/NavBar";
 import theme from "@/theme";
+import { Box } from "@mui/material";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,7 +36,19 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         <NextTopLoader />
 
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <Box
+              sx={{
+                padding: "10px",
+                borderBottom: "1px solid #C7C7C7",
+                boxShadow: "0 2px 2px -1px #C7C7C7",
+              }}
+            >
+              <NavBar />
+            </Box>
+
+            {children}
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

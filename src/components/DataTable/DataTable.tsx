@@ -69,60 +69,65 @@ const DataTable = <T extends Record<string, any>>({
 
   return (
     <Box>
-      <TableContainer>
-        <Table>
-          <TableHead sx={{ backgroundColor: "#dfeafc" }}>
-            <TableRow>
-              {columns.map((column) => {
-                const { HeaderRenderer = HeaderCell, ...otherProps } = column;
+      <Table>
+        <TableHead
+          sx={{
+            backgroundColor: "#dfeafc",
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+          }}
+        >
+          <TableRow>
+            {columns.map((column) => {
+              const { HeaderRenderer = HeaderCell, ...otherProps } = column;
 
-                return (
-                  <TableCell key={column.id}>
-                    <HeaderRenderer column={otherProps} />
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
-
-          {hasData && (
-            <TableBody>
-              {data.map((item) => {
-                return (
-                  <TableRow
-                    key={item[tableRowDataKey]}
-                    sx={{
-                      "&:nth-of-type(odd)": {
-                        backgroundColor: "#f7f7f7",
-                      },
-                    }}
-                  >
-                    {columns.map((column) => {
-                      const { CellRenderer } = column;
-
-                      return (
-                        <TableCell key={column.id}>
-                          {CellRenderer && <CellRenderer item={item} />}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          )}
-
-          {!hasData && (
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={columns.length} align="center">
-                  No data found
+              return (
+                <TableCell key={column.id}>
+                  <HeaderRenderer column={otherProps} />
                 </TableCell>
-              </TableRow>
-            </TableBody>
-          )}
-        </Table>
-      </TableContainer>
+              );
+            })}
+          </TableRow>
+        </TableHead>
+
+        {hasData && (
+          <TableBody>
+            {data.map((item) => {
+              return (
+                <TableRow
+                  key={item[tableRowDataKey]}
+                  sx={{
+                    "&:nth-of-type(odd)": {
+                      backgroundColor: "#f7f7f7",
+                    },
+                  }}
+                >
+                  {columns.map((column) => {
+                    const { CellRenderer } = column;
+
+                    return (
+                      <TableCell key={column.id}>
+                        {CellRenderer && <CellRenderer item={item} />}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        )}
+
+        {!hasData && (
+          <TableBody>
+            <TableRow>
+              <TableCell colSpan={columns.length} align="center">
+                No data found
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        )}
+      </Table>
 
       {shouldShowPagination && (
         <TablePagination
