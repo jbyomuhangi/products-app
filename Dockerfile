@@ -21,20 +21,30 @@ ENV SENTRY_ORG=$SENTRY_ORG \
 # Run the Next.js build (includes Sentry's source map upload)
 RUN yarn build
 
-
-
 # Production image
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Copy only the build output and dependencies from builder stage
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/next.config.ts ./next.config.ts
-COPY --from=builder /app/package.json ./package.json
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy the standalone output from the builder stage
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# Set the correct permissions
+RUN chown -R nextjs:nodejs /app
+
+# Switch to the non-root user
+USER nextjs
 
 # Expose port
 EXPOSE 3000
 
+# Set environment variable for the port
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
 # Start the Next.js app
-CMD ["yarn", "start"]
+CMD ["node", "server.js"]
