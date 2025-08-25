@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 const Home = () => {
-  redirect("/products");
+  redirect("/products?page=0&rowsPerPage=100");
 
   return null;
 };
