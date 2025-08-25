@@ -1,27 +1,31 @@
 import { expect, test } from "@playwright/test";
-import { AttributesPage } from "./testHelper";
+
+import {
+  clearNameFilter,
+  expectNameCellsToContainText,
+  expectUrlToContainParams,
+  filterByName,
+  waitForPageLoad,
+} from "./testHelpers";
 
 test.describe("Attributes Page Filters", () => {
-  let attributesPage: AttributesPage;
-
   test.beforeEach(async ({ page }) => {
-    attributesPage = new AttributesPage(page);
-    await attributesPage.goto();
-    await attributesPage.waitForPageLoad();
+    await page.goto("/attributes");
+    await waitForPageLoad(page);
   });
 
   test("should filter by name", async ({ page }) => {
     // Test filtering by a specific name
-    await attributesPage.filterByName("Product ID");
+    await filterByName(page, "Product ID");
 
     // Verify the URL contains the filter parameter
-    await attributesPage.expectUrlToContainParams({ name: "Product ID" });
+    await expectUrlToContainParams(page, { name: "Product ID" });
 
     // Verify the table shows filtered results
-    await attributesPage.expectNameCellsToContainText("Product ID");
+    await expectNameCellsToContainText(page, "Product ID");
 
     // Clear the filter
-    await attributesPage.clearNameFilter();
+    await clearNameFilter(page);
 
     // Verify the filter is cleared
     await expect(page.getByPlaceholder("Search by name")).toHaveValue("");
@@ -29,14 +33,14 @@ test.describe("Attributes Page Filters", () => {
 
   test("should maintain filter state on page refresh", async ({ page }) => {
     // Apply a filter
-    await attributesPage.filterByName("Product");
+    await filterByName(page, "Product");
 
     // Refresh the page
     await page.reload();
-    await attributesPage.waitForPageLoad();
+    await waitForPageLoad(page);
 
     // Verify the URL contains the filter parameter
-    await attributesPage.expectUrlToContainParams({ name: "Product" });
+    await expectUrlToContainParams(page, { name: "Product" });
 
     // Verify the search input has the correct value
     await expect(page.getByPlaceholder("Search by name")).toHaveValue(
@@ -44,6 +48,6 @@ test.describe("Attributes Page Filters", () => {
     );
 
     // Verify the table shows the filtered results
-    await attributesPage.expectNameCellsToContainText("Product");
+    await expectNameCellsToContainText(page, "Product");
   });
 });
