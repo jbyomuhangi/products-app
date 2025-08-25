@@ -8,6 +8,8 @@
 - Each page will list out data about the objects in a table style fashion, and users can sort, search filter and paginate these tables in different ways.
 - Information about the sort, search filter and pagination are all stored in the URL, so users can effectively "save" these views by copying the URL link and saving it somewhere, they can also share this link with other people who will then be taken to the same view.
 - This application makes use of environment variables, so please be aware of that if you try to run or build it. The list of required variables can be found in `env_template.txt`, you will just need to make sure these variables get loaded in when you try to build/run the app.
+  - `NEXT_PUBLIC_BACKEND_URL=http://localhost:3000` is the minimum you will need to run the app.
+  - To enable logging with Sentry, you will need to create a project in Sentry and set the `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` and `NEXT_PUBLIC_SENTRY_DSN` environment variables.
 
 # Assumptions
 
