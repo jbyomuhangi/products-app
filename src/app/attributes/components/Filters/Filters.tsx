@@ -58,6 +58,7 @@ const Filters = () => {
           <Box sx={{ width: "200px" }}>
             <Select
               isClearable
+              placeholder="Type"
               value={typeValue}
               options={typeFilterOptions}
               onChange={(newValue) => {
@@ -75,6 +76,7 @@ const Filters = () => {
           <Box sx={{ width: "200px" }}>
             <Select
               isClearable
+              placeholder="Group"
               value={groupValue}
               options={groupFilterOptions}
               onChange={(newValue) => {
