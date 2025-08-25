@@ -34,7 +34,7 @@ const AttributesTable: React.FC<AttributesTableProps> = ({
         label: "Name",
         orderingKey: "name",
         CellRenderer: ({ item }) => {
-          return <Box>{item.name}</Box>;
+          return <Box data-testid="attribute-name">{item.name}</Box>;
         },
       },
 
@@ -89,7 +89,7 @@ const AttributesTable: React.FC<AttributesTableProps> = ({
     <ClientErrorBoundary
       ErrorBoundaryProps={{ fallback: <ErrorBoundaryFallback /> }}
     >
-      <DataTable columns={columns} data={data} totalCount={totalCount} />;
+      <DataTable columns={columns} data={data} totalCount={totalCount} />
     </ClientErrorBoundary>
   );
 };

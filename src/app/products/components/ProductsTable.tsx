@@ -59,7 +59,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ data, totalCount }) => {
     <ClientErrorBoundary
       ErrorBoundaryProps={{ fallback: <ErrorBoundaryFallback /> }}
     >
-      <DataTable columns={columns} data={data} totalCount={totalCount} />;
+      <DataTable columns={columns} data={data} totalCount={totalCount} />
     </ClientErrorBoundary>
   );
 };

@@ -70,7 +70,7 @@ const DataTable = <T extends Record<string, any>>({
 
   return (
     <Box>
-      <Table>
+      <Table data-testid="data-table">
         <TableHead
           sx={{
             backgroundColor: "#dfeafc",
